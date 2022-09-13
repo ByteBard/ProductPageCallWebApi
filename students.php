@@ -35,15 +35,15 @@
 </head>
 <body>
 
-<!-- Add Student -->
-<div class="modal fade" id="studentAddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Add Product -->
+<div class="modal fade" id="productAddModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add Student</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="saveStudent">
+        <form id="saveProduct">
             <div class="modal-body">
 
                 <div id="errorMessage" class="alert alert-warning d-none"></div>
@@ -53,11 +53,11 @@
                     <input type="text" name="name" class="form-control" />
                 </div>
                 <div class="mb-3">
-                    <label for="">Email</label>
+                    <label for="">Price</label>
                     <input type="text" name="email" class="form-control" />
                 </div>
                 <div class="mb-3">
-                    <label for="">Phone</label>
+                    <label for="">Type</label>
                     <input type="text" name="phone" class="form-control" />
                 </div>
                 <div class="mb-3">
@@ -67,27 +67,27 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save Student</button>
+                <button type="submit" class="btn btn-primary">Save Product</button>
             </div>
         </form>
         </div>
     </div>
 </div>
 
-<!-- Edit Student Modal -->
-<div class="modal fade" id="studentEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Edit Product Modal -->
+<div class="modal fade" id="productEditModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Edit Student</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Edit Product</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form id="updateStudent">
+        <form id="updateProduct">
             <div class="modal-body">
 
                 <div id="errorMessageUpdate" class="alert alert-warning d-none"></div>
 
-                <input type="hidden" name="student_id" id="student_id" >
+                <input type="hidden" name="product_id" id="product_id" >
 
                 <div class="mb-3">
                     <label for="">Name</label>
@@ -108,19 +108,19 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Update Student</button>
+                <button type="submit" class="btn btn-primary">Update Product</button>
             </div>
         </form>
         </div>
     </div>
 </div>
 
-<!-- View Student Modal -->
-<div class="modal fade" id="studentViewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- View Product Modal -->
+<div class="modal fade" id="productViewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">View Student</h5>
+            <h5 class="modal-title" id="exampleModalLabel">View Product</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <div class="modal-body">
@@ -154,10 +154,10 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>PHP Ajax CRUD without page reload using Bootstrap Modal
+                    <h4>Product List
                         
-                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#studentAddModal">
-                            Add Student
+                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#productAddModal">
+                            Add Product
                         </button>
                     </h4>
                 </div>
@@ -193,9 +193,9 @@
                                         <td><?= $student['phone'] ?></td>
                                         <td><?= $student['course'] ?></td>
                                         <td>
-                                            <button type="button" value="<?=$student['id'];?>" class="viewStudentBtn btn btn-info btn-sm">View</button>
+                                            <button type="button" value="<?=$student['id'];?>" class="viewProductBtn btn btn-info btn-sm">View</button>
                                             <button type="button" value="<?=$student['id'];?>" class="editStudentBtn btn btn-success btn-sm">Edit</button>
-                                            <button type="button" value="<?=$student['id'];?>" class="deleteStudentBtn btn btn-danger btn-sm">Delete</button>
+                                            <button type="button" value="<?=$student['id'];?>" class="deleteProductBtn btn btn-danger btn-sm">Delete</button>
                                         </td>
                                     </tr>
                                     <?php
@@ -212,13 +212,70 @@
     </div>
 </div>
 
+
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Product List
+                        <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal" data-bs-target="#productAddModal">
+                            Add Product
+                        </button>
+                    </h4>
+                </div>
+                <div class="card-body">
+
+                    <table id="productTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                           
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
     <script>
-        $(document).on('submit', '#saveStudent', function (e) {
+	
+	        $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:5275/api/Product/GetAllProduct",
+                processData: false,
+                contentType: false,
+                success: function (response) {
+				$.each(response, function (index,rec) {
+					$("#productTable tbody").append("<tr>" + 
+					"<td>" + rec.name + "</td>" +
+					"<td>" + rec.price + "</td>" +
+					"<td>" + rec.type + "</td>" +
+					"</tr>");
+				});
+                }
+            });
+        }); 
+
+        $(document).on('submit', '#saveProduct', function (e) {
             e.preventDefault();
 
             var formData = new FormData(this);
@@ -240,8 +297,8 @@
                     }else if(res.status == 200){
 
                         $('#errorMessage').addClass('d-none');
-                        $('#studentAddModal').modal('hide');
-                        $('#saveStudent')[0].reset();
+                        $('#productAddModal').modal('hide');
+                        $('#saveProduct')[0].reset();
 
                         alertify.set('notifier','position', 'top-right');
                         alertify.success(res.message);
@@ -258,11 +315,11 @@
 
         $(document).on('click', '.editStudentBtn', function () {
 
-            var student_id = $(this).val();
+            var product_id = $(this).val();
             
             $.ajax({
                 type: "GET",
-                url: "code.php?student_id=" + student_id,
+                url: "code.php?product_id=" + product_id,
                 success: function (response) {
 
                     var res = jQuery.parseJSON(response);
@@ -271,13 +328,13 @@
                         alert(res.message);
                     }else if(res.status == 200){
 
-                        $('#student_id').val(res.data.id);
+                        $('#product_id').val(res.data.id);
                         $('#name').val(res.data.name);
                         $('#email').val(res.data.email);
                         $('#phone').val(res.data.phone);
                         $('#course').val(res.data.course);
 
-                        $('#studentEditModal').modal('show');
+                        $('#productEditModal').modal('show');
                     }
 
                 }
@@ -285,7 +342,7 @@
 
         });
 
-        $(document).on('submit', '#updateStudent', function (e) {
+        $(document).on('submit', '#updateProduct', function (e) {
             e.preventDefault();
 
             var formData = new FormData(this);
@@ -311,8 +368,8 @@
                         alertify.set('notifier','position', 'top-right');
                         alertify.success(res.message);
                         
-                        $('#studentEditModal').modal('hide');
-                        $('#updateStudent')[0].reset();
+                        $('#productEditModal').modal('hide');
+                        $('#updateProduct')[0].reset();
 
                         $('#myTable').load(location.href + " #myTable");
 
@@ -324,12 +381,12 @@
 
         });
 
-        $(document).on('click', '.viewStudentBtn', function () {
+        $(document).on('click', '.viewProductBtn', function () {
 
-            var student_id = $(this).val();
+            var product_id = $(this).val();
             $.ajax({
                 type: "GET",
-                url: "code.php?student_id=" + student_id,
+                url: "code.php?product_id=" + product_id,
                 success: function (response) {
 
                     var res = jQuery.parseJSON(response);
@@ -343,24 +400,24 @@
                         $('#view_phone').text(res.data.phone);
                         $('#view_course').text(res.data.course);
 
-                        $('#studentViewModal').modal('show');
+                        $('#productViewModal').modal('show');
                     }
                 }
             });
         });
 
-        $(document).on('click', '.deleteStudentBtn', function (e) {
+        $(document).on('click', '.deleteProductBtn', function (e) {
             e.preventDefault();
 
-            if(confirm('Are you sure you want to delete this data?'))
+            if(confirm('Are you sure you want to delete this product?'))
             {
-                var student_id = $(this).val();
+                var product_id = $(this).val();
                 $.ajax({
                     type: "POST",
                     url: "code.php",
                     data: {
                         'delete_student': true,
-                        'student_id': student_id
+                        'product_id': product_id
                     },
                     success: function (response) {
 
