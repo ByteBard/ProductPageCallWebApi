@@ -55,6 +55,8 @@
                                      <th>Price</th>
                                      <th>Type</th>
                                      <th>Active</th>
+                                     <th>Edit</th>
+                                     <th>Delete</th>
                                  </tr>
                              </thead>
                              <tbody id="table-body">
@@ -100,6 +102,16 @@
              } else {
                  alert('Not Deleted');
              }
+         })
+
+         $('table').on('click', 'input[type="submit"]', function(e) {
+             e.preventDefault();
+             var id = $(this).closest("tr").find(".idRow").text()
+             var name = $(this).closest("tr").find(".nameRow").text()
+             var price = $(this).closest("tr").find(".priceRow").text()
+             var type = $(this).closest("tr").find(".typeRow").text()
+             var active = $(this).closest("tr").find(".activeRow").text()
+             window.location.href = "edit.php?id=" + id + "&name=" + name + "&price=" + price + "&type=" + type + "&active=" + active;
          })
 
          function postDataWithCallback(method, url) {
@@ -188,10 +200,11 @@
                              //Keep in mind we are using "Template Litterals to create rows"
                              var row = `<tr>
                   <td class="idRow">${myList[i].id}</td>
-                  <td >${myList[i].name}</td>
-                  <td>${myList[i].price}</td>
-                  <td>${myList[i].type}</td>
-                  <td>${myList[i].active}</td>
+                  <td class="nameRow">${myList[i].name}</td>
+                  <td class="priceRow">${myList[i].price}</td>
+                  <td class="typeRow">${myList[i].type}</td>
+                  <td class="activeRow">${myList[i].active}</td>
+                  <td><input type="submit" value="Edit"></td>
                   <td><input type="button" value="Delete"></td>
                   `
                              table.append(row)
@@ -244,127 +257,6 @@
                  }
              });
 
-         });
-
-         $(document).on('click', '.editStudentBtn', function() {
-
-             var product_id = $(this).val();
-
-             $.ajax({
-                 type: "GET",
-                 url: "code.php?product_id=" + product_id,
-                 success: function(response) {
-
-                     var res = jQuery.parseJSON(response);
-                     if (res.status == 404) {
-
-                         alert(res.message);
-                     } else if (res.status == 200) {
-
-                         $('#product_id').val(res.data.id);
-                         $('#name').val(res.data.name);
-                         $('#email').val(res.data.email);
-                         $('#phone').val(res.data.phone);
-                         $('#course').val(res.data.course);
-
-                         $('#productEditModal').modal('show');
-                     }
-                 }
-             });
-
-         });
-
-         $(document).on('submit', '#updateProduct', function(e) {
-             e.preventDefault();
-
-             var formData = new FormData(this);
-             formData.append("update_student", true);
-
-             $.ajax({
-                 type: "POST",
-                 url: "code.php",
-                 data: formData,
-                 processData: false,
-                 contentType: false,
-                 success: function(response) {
-
-                     var res = jQuery.parseJSON(response);
-                     if (res.status == 422) {
-                         $('#errorMessageUpdate').removeClass('d-none');
-                         $('#errorMessageUpdate').text(res.message);
-
-                     } else if (res.status == 200) {
-
-                         $('#errorMessageUpdate').addClass('d-none');
-
-                         alertify.set('notifier', 'position', 'top-right');
-                         alertify.success(res.message);
-
-                         $('#productEditModal').modal('hide');
-                         $('#updateProduct')[0].reset();
-
-                         $('#myTable').load(location.href + " #myTable");
-
-                     } else if (res.status == 500) {
-                         alert(res.message);
-                     }
-                 }
-             });
-
-         });
-
-         $(document).on('click', '.viewProductBtn', function() {
-
-             var product_id = $(this).val();
-             $.ajax({
-                 type: "GET",
-                 url: "code.php?product_id=" + product_id,
-                 success: function(response) {
-
-                     var res = jQuery.parseJSON(response);
-                     if (res.status == 404) {
-
-                         alert(res.message);
-                     } else if (res.status == 200) {
-
-                         $('#view_name').text(res.data.name);
-                         $('#view_email').text(res.data.email);
-                         $('#view_phone').text(res.data.phone);
-                         $('#view_course').text(res.data.course);
-
-                         $('#productViewModal').modal('show');
-                     }
-                 }
-             });
-         });
-
-         $(document).on('click', '.deleteProductBtn', function(e) {
-             e.preventDefault();
-
-             if (confirm('Are you sure you want to delete this product?')) {
-                 var product_id = $(this).val();
-                 $.ajax({
-                     type: "POST",
-                     url: "code.php",
-                     data: {
-                         'delete_student': true,
-                         'product_id': product_id
-                     },
-                     success: function(response) {
-
-                         var res = jQuery.parseJSON(response);
-                         if (res.status == 500) {
-
-                             alert(res.message);
-                         } else {
-                             alertify.set('notifier', 'position', 'top-right');
-                             alertify.success(res.message);
-
-                             $('#myTable').load(location.href + " #myTable");
-                         }
-                     }
-                 });
-             }
          });
      </script>
 

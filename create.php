@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
             if (isValid) {
                 var url = "http://localhost:5275/api/Product/CreateProduct/" + name + "/" + price + "/" + type + "/" + isActive;
                 CreateProduct("POST", url)
+                reloadPage()
             } else {
                 alert("product created failed, please check input")
             }
@@ -112,6 +113,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
                 }
             });
         }
+
+        function reloadPage() {
+            window.location.href = 'product.php';
+        };
     </script>
 </body>
 
