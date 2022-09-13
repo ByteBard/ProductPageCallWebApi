@@ -229,19 +229,16 @@
                          <table id="productTable" class="table table-bordered table-striped">
                              <thead>
                                  <tr>
+                                     <th>Id</th>
                                      <th>Name</th>
                                      <th>Price</th>
                                      <th>Type</th>
+                                     <th>Active</th>
                                  </tr>
                              </thead>
                              <tbody id="table-body">
                              </tbody>
                          </table>
-                         <!-- <div class="pagination-container">
-                             <nav>
-                                 <ul class="pagination"></ul>
-                             </nav>
-                         </div> -->
                      </div>
                      <div class="container ">
                          <div id="pagination-wrapper"></div>
@@ -251,30 +248,38 @@
          </div>
      </div>
 
-     <!-- <div class="container" style="margin-top:40px">
-         <h4>Select row Number for each page</h4>
-         <div class="form-group">
-             <select name="state" id="maxRows" class="form-control" style="width:180px;">
-                 <option value="10000">Show All</option>
-                 <option value="5">5</option>
-                 <option value="10">10</option>
-                 <option value="20">20</option>
-                 <option value="10000">Show All</option>
-             </select>
-         </div>
-     </div> -->
-
-
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
      <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 
      <script>
-         $(document).ready(function() {
+         var orderByAsc = true;
+         $('#productTable thead').on('click', 'th', function() {
+             orderByAsc = !orderByAsc
+             var sortBy = this.firstChild.data
+             var url = "http://localhost:5275/api/Product/GetAllProduct/" + orderByAsc.toString() + "/" + sortBy
+             postDataWithCallback("GET", url)
+
+         });
+
+         $('table').on('click', 'input[type="button"]', function(e) {
+             e.preventDefault();
+             var answer = confirm('Do you want to delete?');
+             if (answer) {
+                 var id = $(this).closest("tr").find(".idRow").text()
+                 var url = "http://localhost:5275/api/Product/Delete/" + id
+                 postDataWithCallback("POST", url)
+                 alert('Deleted');
+                 reloadPage()
+             } else {
+                 alert('Not Deleted');
+             }
+         })
+
+         function postDataWithCallback(method, url) {
              $.ajax({
-                 type: "GET",
-                 url: "http://localhost:5275/api/Product/GetAllProduct",
+                 type: method,
+                 url: url,
                  processData: false,
                  contentType: false,
                  success: function(response) {
@@ -285,6 +290,7 @@
                          'window': 5,
                      }
 
+                     $('#productTable tbody').empty();
                      buildTable()
 
                      function pagination(querySet, page, rows) {
@@ -325,8 +331,6 @@
                              maxRight = pages
                          }
 
-
-
                          for (var page = maxLeft; page <= maxRight; page++) {
                              wrapper.innerHTML += `<button value=${page} class="page btn btn-sm btn-info">${page}</button>`
                          }
@@ -349,7 +353,6 @@
 
                      }
 
-
                      function buildTable() {
                          var table = $('#table-body')
                          var data = pagination(state.querySet, state.page, state.rows)
@@ -358,9 +361,12 @@
                          for (var i = 1 in myList) {
                              //Keep in mind we are using "Template Litterals to create rows"
                              var row = `<tr>
-                  <td>${myList[i].name}</td>
+                  <td class="idRow">${myList[i].id}</td>
+                  <td >${myList[i].name}</td>
                   <td>${myList[i].price}</td>
                   <td>${myList[i].type}</td>
+                  <td>${myList[i].active}</td>
+                  <td><input type="button" value="Delete"></td>
                   `
                              table.append(row)
                          }
@@ -371,94 +377,25 @@
 
                  }
              });
+         }
+
+         function reloadPage() {
+             var url = "http://localhost:5275/api/Product/GetAllProduct/true"
+             postDataWithCallback("GET", url)
+         };
+
+         $(document).ready(function() {
+             reloadPage()
          });
-
-
-
-
-
-         //  var table = "#productTable"
-         //  $('#maxRows').on('change', function() {
-         //      $('.pagination').html('')
-         //      var trnum = 0
-         //      var maxRows = parseInt($(this).val())
-         //      var totalRows = $(table + ' tbody tr').length
-         //      $(table + ' tr:gt(0)').each(function() {
-         //          trnum++
-         //          if (trnum > maxRows) {
-         //              $(this).hide()
-         //          }
-         //          if (trnum <= maxRows) {
-         //              $(this).show()
-         //          }
-         //      })
-         //      if (totalRows > maxRows) {
-         //          var pageNum = Math.cell(totalRows / maxRows)
-         //          for (var i = 1; i <= pagenum;) {
-         //              $('.pagination').append('<li data-page="' + i + '">\<span>' + i++ +
-         //                  '<span class="sr-only">(current)</span></span>\</li>').show()
-         //          }
-         //      }
-         //      $('.pagination li:first-child').addClass('active')
-         //      $('.pagination li').on('click', function() {
-         //          var pageNum = $(this).attr('data-page')
-         //          var triIndex = 0;
-         //          $('.pagination li').removeClass('active')
-         //          $(this).addClass('active')
-         //          $(table + ' tr:gt(0)').each(function() {
-         //              triIndex++
-         //              if (triIndex > (maxRows * pageNum) || triIndex <= ((maxRows * pageNum) - maxRows)) {
-         //                  $(this).hide()
-         //              } else {
-         //                  $(this).show()
-         //              }
-         //          })
-         //      })
-
-         //      $(function() {
-         //          $('table tr:eq(0)').prepend('<th>ID</th>')
-         //          var id = 0;
-         //          $('table tr:gt(0)').each(function() {
-         //              id++
-         //              $(this).prepend('<td>' + id + '</td>')
-         //          })
-         //      })
-         //  })
-
-
-
-         //  $(document).ready(function() {
-         //      $.ajax({
-         //          type: "GET",
-         //          url: "http://localhost:5275/api/Product/GetAllProduct",
-         //          processData: false,
-         //          contentType: false,
-         //          success: function(response) {
-         //              $.each(response, function(index, rec) {
-         //                  $("#productTable tbody").append("<tr>" +
-         //                      "<td>" + rec.name + "</td>" +
-         //                      "<td>" + rec.price + "</td>" +
-         //                      "<td>" + rec.type + "</td>" +
-         //                      "</tr>");
-         //              });
-         //          }
-         //      });
-         //  });
 
          $(document).on('submit', '#saveProduct', function(e) {
              e.preventDefault();
-
-             var formData = new FormData(this);
-             formData.append("save_student", true);
-
              $.ajax({
                  type: "GET",
                  url: "http://localhost:5275/api/Product/GetAllProduct",
-                 data: formData,
                  processData: false,
                  contentType: false,
                  success: function(response) {
-
                      var res = jQuery.parseJSON(response);
                      if (res.status == 422) {
                          $('#errorMessage').removeClass('d-none');
