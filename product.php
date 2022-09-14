@@ -144,8 +144,8 @@
                      }
 
                      function setNavigateButtons(pages) {
-                         var wrapper = document.getElementById('pagination-context')
-                         wrapper.innerHTML = ``
+                         var contextComponent = document.getElementById('pagination-context')
+                         contextComponent.innerHTML = ``
                          var left = (paginationContext.page - Math.floor(paginationContext.size / 2))
                          var right = (paginationContext.page + Math.floor(paginationContext.size / 2))
 
@@ -165,19 +165,7 @@
                              right = pages
                          }
 
-                         // text == first page by default (over-boundary)
-                         if (paginationContext.page != 1) {
-                             wrapper.innerHTML = `<button value=${1} class="page btn btn-sm btn-info">&#171; First Page</button>` + wrapper.innerHTML
-                         }
-
-                         for (var page = left; page <= right; page++) {
-                             wrapper.innerHTML += `<button value=${page} class="page btn btn-sm btn-info">${page}</button>`
-                         }
-
-                         // text == last page by default (over-boundary)
-                         if (paginationContext.page != pages) {
-                             wrapper.innerHTML += `<button value=${pages} class="page btn btn-sm btn-info">Last Page&#187;</button>`
-                         }
+                         setPaginationBtnTxt(paginationContext, contextComponent, left, right, pages)
 
                          $('.page').on('click', function() {
                              $('#table-body').empty()
@@ -185,6 +173,22 @@
                              setupTable()
                          })
 
+                     }
+
+                     function setPaginationBtnTxt(paginationContext, contextComponent, left, right, pages) {
+                         // text == first page by default (over-boundary)
+                         if (paginationContext.page != 1) {
+                             contextComponent.innerHTML = `<button value=${1} class="page btn btn-sm btn-info">&#171; First Page</button>` + contextComponent.innerHTML
+                         }
+
+                         for (var page = left; page <= right; page++) {
+                             contextComponent.innerHTML += `<button value=${page} class="page btn btn-sm btn-info">${page}</button>`
+                         }
+
+                         // text == last page by default (over-boundary)
+                         if (paginationContext.page != pages) {
+                             contextComponent.innerHTML += `<button value=${pages} class="page btn btn-sm btn-info">Last Page&#187;</button>`
+                         }
                      }
 
                      function setupTable() {
