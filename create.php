@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
             var type = $('#type').val();
             var isActive = $('#activeCheck').is(':checked');
 
-            if (name == "" || price == "" || type == "") {
+            if (name == "" || name == null || price == "" || price == null || type == "" || type == null) {
                 alert("Name, Price, or Type must be filled out");
                 isValid = false;
             }
