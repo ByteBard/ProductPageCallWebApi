@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
                     <div class="card-header">
                         <div class="mb-3">
                             <label for="">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" maxlength="20" size="20" />
+                            <input type="text" name="name" id="name" class="form-control" maxlength="100" size="100" />
                         </div>
                         <div class="mb-3">
                             <label for="">Price</label>

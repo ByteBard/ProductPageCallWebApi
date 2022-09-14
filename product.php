@@ -64,7 +64,7 @@
                          </table>
                      </div>
                      <div class="container ">
-                         <div id="pagination-wrapper"></div>
+                         <div id="pagination-context"></div>
                      </div>
                  </div>
              </div>
@@ -121,83 +121,78 @@
                  processData: false,
                  contentType: false,
                  success: function(response) {
-                     var state = {
-                         'querySet': response,
+                     var paginationContext = {
+                         'dataSet': response,
                          'page': 1,
-                         'rows': 5,
-                         'window': 5,
+                         'limit': 5,
+                         'size': 10,
                      }
 
                      $('#productTable tbody').empty();
-                     buildTable()
+                     setupTable()
 
-                     function pagination(querySet, page, rows) {
-
-                         var trimStart = (page - 1) * rows
-                         var trimEnd = trimStart + rows
-
-                         var trimmedData = querySet.slice(trimStart, trimEnd)
-
-                         var pages = Math.round(querySet.length / rows);
+                     function setPagination(dataSet, page, limit) {
+                         var start = (page - 1) * limit
+                         var end = start + limit
+                         var slice = dataSet.slice(start, end)
+                         var pageCount = Math.round(dataSet.length / limit) + 1;
 
                          return {
-                             'querySet': trimmedData,
-                             'pages': pages,
+                             'dataSet': slice,
+                             'pages': pageCount,
                          }
                      }
 
-                     function pageButtons(pages) {
-                         var wrapper = document.getElementById('pagination-wrapper')
-
+                     function setNavigateButtons(pages) {
+                         var wrapper = document.getElementById('pagination-context')
                          wrapper.innerHTML = ``
-                         console.log('Pages:', pages)
+                         var left = (paginationContext.page - Math.floor(paginationContext.size / 2))
+                         var right = (paginationContext.page + Math.floor(paginationContext.size / 2))
 
-                         var maxLeft = (state.page - Math.floor(state.window / 2))
-                         var maxRight = (state.page + Math.floor(state.window / 2))
-
-                         if (maxLeft < 1) {
-                             maxLeft = 1
-                             maxRight = state.window
+                         //adjust left, set as first page by default
+                         if (left < 1) {
+                             left = 1
+                             right = paginationContext.size
                          }
 
-                         if (maxRight > pages) {
-                             maxLeft = pages - (state.window - 1)
+                         //adjust right, set as the last page by default
+                         if (right > pages) {
+                             left = pages - (paginationContext.size - 1)
 
-                             if (maxLeft < 1) {
-                                 maxLeft = 1
+                             if (left < 1) {
+                                 left = 1
                              }
-                             maxRight = pages
+                             right = pages
                          }
 
-                         for (var page = maxLeft; page <= maxRight; page++) {
+                         // text == first page by default (over-boundary)
+                         if (paginationContext.page != 1) {
+                             wrapper.innerHTML = `<button value=${1} class="page btn btn-sm btn-info">&#171; First Page</button>` + wrapper.innerHTML
+                         }
+
+                         for (var page = left; page <= right; page++) {
                              wrapper.innerHTML += `<button value=${page} class="page btn btn-sm btn-info">${page}</button>`
                          }
 
-                         if (state.page != 1) {
-                             wrapper.innerHTML = `<button value=${1} class="page btn btn-sm btn-info">&#171; First</button>` + wrapper.innerHTML
-                         }
-
-                         if (state.page != pages) {
-                             wrapper.innerHTML += `<button value=${pages} class="page btn btn-sm btn-info">Last &#187;</button>`
+                         // text == last page by default (over-boundary)
+                         if (paginationContext.page != pages) {
+                             wrapper.innerHTML += `<button value=${pages} class="page btn btn-sm btn-info">Last Page&#187;</button>`
                          }
 
                          $('.page').on('click', function() {
                              $('#table-body').empty()
-
-                             state.page = Number($(this).val())
-
-                             buildTable()
+                             paginationContext.page = Number($(this).val())
+                             setupTable()
                          })
 
                      }
 
-                     function buildTable() {
+                     function setupTable() {
                          var table = $('#table-body')
-                         var data = pagination(state.querySet, state.page, state.rows)
-                         var myList = data.querySet
+                         var data = setPagination(paginationContext.dataSet, paginationContext.page, paginationContext.limit)
+                         var myList = data.dataSet
 
                          for (var i = 1 in myList) {
-                             //Keep in mind we are using "Template Litterals to create rows"
                              var row = `<tr>
                   <td class="idRow">${myList[i].id}</td>
                   <td class="nameRow">${myList[i].name}</td>
@@ -210,7 +205,7 @@
                              table.append(row)
                          }
 
-                         pageButtons(data.pages)
+                         setNavigateButtons(data.pages)
                      }
 
 
@@ -225,38 +220,6 @@
 
          $(document).ready(function() {
              reloadPage()
-         });
-
-         $(document).on('submit', '#saveProduct', function(e) {
-             e.preventDefault();
-             $.ajax({
-                 type: "GET",
-                 url: "http://localhost:5275/api/Product/GetAllProduct",
-                 processData: false,
-                 contentType: false,
-                 success: function(response) {
-                     var res = jQuery.parseJSON(response);
-                     if (res.status == 422) {
-                         $('#errorMessage').removeClass('d-none');
-                         $('#errorMessage').text(res.message);
-
-                     } else if (res.status == 200) {
-
-                         $('#errorMessage').addClass('d-none');
-                         $('#productAddModal').modal('hide');
-                         $('#saveProduct')[0].reset();
-
-                         alertify.set('notifier', 'position', 'top-right');
-                         alertify.success(res.message);
-
-                         $('#myTable').load(location.href + " #myTable");
-
-                     } else if (res.status == 500) {
-                         alert(res.message);
-                     }
-                 }
-             });
-
          });
      </script>
 
