@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
                             <label class="form-check-label" for="activeCheck">Active</label><br><br><br>
                         </div>
                         <div class="card" style="width: 18rem;">
-                            <button type="button" id="create" class="btn btn-primary btn-lg">Edit Product</button>
+                            <button type="button" id="edit" class="btn btn-primary btn-lg">Edit Product</button>
                         </div><br>
                         <div class="card" style="width: 18rem;">
                             <button type="button" id="back" class="btn btn-secondary btn-lg">Back to Product</button>
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 
 
-        $('#create').click(function() {
+        $('#edit').click(function() {
             isValid = true
             var productId = $('#productId').val();
             var name = $('#name').val();
